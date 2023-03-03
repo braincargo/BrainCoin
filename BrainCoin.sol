@@ -1,29 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20SnapshotUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
 /// @custom:security-contact security@braincargo.com
-contract BrainCoin is Initializable, ERC20Upgradeable, ERC20SnapshotUpgradeable, OwnableUpgradeable, ERC20PermitUpgradeable, ERC20VotesUpgradeable, UUPSUpgradeable {
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        _disableInitializers();
-    }
-
-    function initialize() initializer public {
-        __ERC20_init("BrainCoin", "BRAIN");
-        __ERC20Snapshot_init();
-        __Ownable_init();
-        __ERC20Permit_init("BrainCoin");
-        __ERC20Votes_init();
-        __UUPSUpgradeable_init();
-
+contract BrainCoin is ERC20, ERC20Burnable, ERC20Snapshot, Ownable, Pausable, ERC20Permit, ERC20Votes {
+    constructor() ERC20("BrainCoin", "BRAIN") ERC20Permit("BrainCoin") {
         _mint(msg.sender, 1000000000000 * 10 ** decimals());
     }
 
@@ -31,38 +19,41 @@ contract BrainCoin is Initializable, ERC20Upgradeable, ERC20SnapshotUpgradeable,
         _snapshot();
     }
 
-    function _authorizeUpgrade(address newImplementation)
-        internal
-        onlyOwner
-        override
-    {}
+    function pause() public onlyOwner {
+        _pause();
+    }
 
-    // The following functions are overrides required by Solidity.
+    function unpause() public onlyOwner {
+        _unpause();
+    }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount)
         internal
-        override(ERC20Upgradeable, ERC20SnapshotUpgradeable)
+        whenNotPaused
+        override(ERC20, ERC20Snapshot)
     {
         super._beforeTokenTransfer(from, to, amount);
     }
 
+    // The following functions are overrides required by Solidity.
+
     function _afterTokenTransfer(address from, address to, uint256 amount)
         internal
-        override(ERC20Upgradeable, ERC20VotesUpgradeable)
+        override(ERC20, ERC20Votes)
     {
         super._afterTokenTransfer(from, to, amount);
     }
 
     function _mint(address to, uint256 amount)
         internal
-        override(ERC20Upgradeable, ERC20VotesUpgradeable)
+        override(ERC20, ERC20Votes)
     {
         super._mint(to, amount);
     }
 
     function _burn(address account, uint256 amount)
         internal
-        override(ERC20Upgradeable, ERC20VotesUpgradeable)
+        override(ERC20, ERC20Votes)
     {
         super._burn(account, amount);
     }
