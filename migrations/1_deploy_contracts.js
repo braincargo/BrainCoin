@@ -1,11 +1,11 @@
 const { deployProxy, upgradeProxy } = require('@openzeppelin/truffle-upgrades');
 
-const Box = artifacts.require('BrainCoin');
-const BoxV2 = artifacts.require('BrainCoinV2');
+const BrainCoin = artifacts.require('BrainCoin');
+const BrainCoinV2 = artifacts.require('BrainCoinV2');
 
 module.exports = async function (deployer) {
-  const instance = await deployProxy(Box, [42], { deployer });
+  const instance = await deployProxy(BrainCoin, { deployer });
   console.log("instance", instance.address);
-  const upgraded = await upgradeProxy(instance.address, BoxV2, { deployer });
+  const upgraded = await upgradeProxy(instance.address, BrainCoinV2, { deployer });
   console.log("Upgraded", upgraded.address);
 }
