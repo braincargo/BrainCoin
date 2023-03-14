@@ -1,0 +1,32 @@
+Starting migrations...
+======================
+> Network name:    'dashboard'
+> Network id:      1
+> Block gas limit: 30000000 (0x1c9c380)
+
+
+1_deploy_contracts.js
+=====================
+
+   Deploying 'ERC1967Proxy'
+   ------------------------
+   > transaction hash:    0x0ae78bf09e9b9745a795e88c7b438790b55dfd8884b4e028bd664a2003a9a4fasage.
+   > Blocks: 3            Seconds: 32
+   > contract address:    0xc62B229862E2B1689F281D44CbB95fb416Ab69b6
+   > block number:        16822660
+   > block timestamp:     1678754063
+   > account:             0x85D6D0c9E22DaEDe8e3f5BA2eE2ad11B92FE740c
+   > balance:             0.63972332055061345
+   > gas used:            493240 (0x786b8)
+   > gas price:           22.683698078 gwei
+   > value sent:          0 ETH
+   > total cost:          0.01118850723999272 ETH
+
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:     0.01118850723999272 ETH
+
+Summary
+=======
+> Total deployments:   1
+> Final cost:          0.01118850723999272 ETH
